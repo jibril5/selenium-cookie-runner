@@ -1,7 +1,9 @@
 from flask import Flask, Response
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 import time
+import os
 
 app = Flask(__name__)
 
@@ -12,14 +14,21 @@ PAGE_2 = "https://5afterdark.mom/video/7e4de128-b10f-dc2b-0542-7590c441630e"
 
 def get_cookie():
     chrome_options = Options()
+    chrome_options.binary_location = "/usr/bin/chromium"
+
     chrome_options.add_argument("--headless=new")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--window-size=1920,1080")
-    chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+    chrome_options.add_argument("--remote-debugging-port=9222")
+    chrome_options.add_argument("--disable-software-rasterizer")
+    chrome_options.add_argument("--disable-extensions")
+    chrome_options.add_argument("--disable-notifications")
 
-    driver = webdriver.Chrome(options=chrome_options)
+    service = Service("/usr/bin/chromedriver")
+
+    driver = webdriver.Chrome(service=service, options=chrome_options)
 
     try:
         driver.get(PAGE_1)
@@ -38,10 +47,7 @@ def get_cookie():
         with open("cookie.txt", "w", encoding="utf-8") as f:
             f.write(cookie_value)
 
-        if cookie_value:
-            return cookie_value
-
-        return "Cookie introuvable"
+        return cookie_value if cookie_value else "Cookie introuvable"
 
     finally:
         driver.quit()
@@ -64,4 +70,5 @@ def run():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
