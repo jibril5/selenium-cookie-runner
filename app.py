@@ -2,6 +2,7 @@ from flask import Flask, Response
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 import time
 import os
 
@@ -14,28 +15,27 @@ PAGE_2 = "https://5afterdark.mom/video/7e4de128-b10f-dc2b-0542-7590c441630e"
 
 def get_cookie():
     chrome_options = Options()
-    chrome_options.binary_location = "/usr/bin/chromium"
+    chrome_options.binary_location = "/usr/bin/google-chrome"
 
     chrome_options.add_argument("--headless=new")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--window-size=1920,1080")
-    chrome_options.add_argument("--remote-debugging-port=9222")
-    chrome_options.add_argument("--disable-software-rasterizer")
     chrome_options.add_argument("--disable-extensions")
     chrome_options.add_argument("--disable-notifications")
+    chrome_options.add_argument("--disable-software-rasterizer")
+    chrome_options.add_argument("--remote-debugging-port=9222")
 
-    service = Service("/usr/bin/chromedriver")
-
+    service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=chrome_options)
 
     try:
         driver.get(PAGE_1)
-        time.sleep(2)
+        time.sleep(3)
 
         driver.get(PAGE_2)
-        time.sleep(4)
+        time.sleep(5)
 
         cookie_value = ""
 
@@ -65,8 +65,11 @@ def home():
 
 @app.route("/run")
 def run():
-    result = get_cookie()
-    return Response(result, mimetype="text/plain")
+    try:
+        result = get_cookie()
+        return Response(result, mimetype="text/plain")
+    except Exception as e:
+        return Response(f"ERREUR:\n{e}", status=500, mimetype="text/plain")
 
 
 if __name__ == "__main__":
