@@ -32,7 +32,7 @@ def get_cookie():
     # Aucun cookie valide → génération d'un nouveau
     with SB(
         uc=True,
-        headless=False
+        headless=True
     ) as sb:
 
         url = "https://5afterdark.mom/video/7e4de128-b10f-dc2b-0542-7590c441630e"
