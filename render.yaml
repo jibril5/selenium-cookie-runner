@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: cookie-api
+    runtime: docker
+    plan: free
+    autoDeploy: true
+
+    envVars:
+      - key: TARGET_URL
+        value: https://monsite.com
