@@ -42,6 +42,17 @@ def get_cookie():
         sb.uc_gui_click_captcha()
         sb.driver.connect()
 
+        print("=== PAGE OUVERTE ===")
+        print("URL actuelle :", sb.driver.current_url)
+        print("Titre :", sb.driver.title)
+        
+        
+        print("=== COOKIES TROUVES ===")
+        cookies = sb.driver.get_cookies()
+        
+        for cookie in cookies:
+            print(cookie)
+            
         for cookie in sb.driver.get_cookies():
 
             if cookie["name"] == "__illit":
