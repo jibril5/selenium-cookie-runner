@@ -2,9 +2,14 @@ FROM seleniumbase/seleniumbase
 
 WORKDIR /app
 
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Europe/Paris
+
 RUN apt-get update && apt-get install -y \
     python3-tk \
-    python3-dev
+    python3-dev \
+    tzdata \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
 
