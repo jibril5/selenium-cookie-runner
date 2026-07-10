@@ -37,8 +37,6 @@ def get_cookie():
         sb.uc_open_with_reconnect(url, 0.1)
         sb.driver.uc_activate_cdp_mode(url)
 
-        sb.uc_gui_click_captcha()
-
         sb.driver.connect()
 
         for cookie in sb.driver.get_cookies():
