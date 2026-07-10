@@ -1,6 +1,6 @@
 FROM seleniumbase/seleniumbase:latest
 
-WORKDIR /app
+WORKDIR /ap1
 
 # Évite les installations interactives
 ENV DEBIAN_FRONTEND=noninteractive
