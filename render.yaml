@@ -7,4 +7,4 @@ services:
 
     envVars:
       - key: TARGET_URL
-        value: https://monsite.com
+        value: https://5afterdark.mom/video/7e4de128-b10f-dc2b-0542-7590c441630e
